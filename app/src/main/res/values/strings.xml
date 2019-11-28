@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">notificacion</string>
+    <string name="window_ticket_s">Window Ticket\'s</string>
+    <string name="esperando">Esperando...</string>
 </resources>
