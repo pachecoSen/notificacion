@@ -30,6 +30,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         Toast.makeText(getApplicationContext(), "APP Iniciada...", Toast.LENGTH_SHORT).show();
-        this.http.deffMethod("GET").deffRuta("/ticket/latest").requerido(getApplicationContext());
+        this.http.deffMethod("get").deffRuta("/ticket/latest").requerido(getApplicationContext());
     }
 }
