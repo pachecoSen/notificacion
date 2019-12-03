@@ -1,11 +1,20 @@
 package com.example.notificacion;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import classes.GeoJson;
 import classes.HTTP;
+import interfaces.HTTPCallback;
+
+import static com.example.notificacion.R.layout.dialog_error;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG;
@@ -15,9 +24,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private HTTP http;
+    private GeoJson jsonTool;
 
     public MainActivity(){
         http = new HTTP("http://192.168.1.43/");
+        jsonTool = new GeoJson();
     }
 
     @Override
@@ -30,6 +41,21 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         Toast.makeText(getApplicationContext(), "APP Iniciada...", Toast.LENGTH_SHORT).show();
-        this.http.deffMethod("get").deffRuta("/ticket/latest").requerido(getApplicationContext());
+        this.http.deffMethod("get").deffRuta("/ticket/latest").requerido(getApplicationContext(), new HTTPCallback() {
+            @Override
+            public void onSuccess(String result) {
+                try {
+                    final JSONObject json = jsonTool.deffInData(result).toJson();
+                    if(false == json.getBoolean("estatus")) {
+                        final Dialog dialog = new Dialog(getApplicationContext());
+                        dialog.setContentView(dialog_error);
+                        dialog.show();
+                    }
+
+                } catch (JSONException e) {
+                    Log.e(TAG, "onSuccess: " + "Error Json", e);
+                }
+            }
+        });
     }
 }

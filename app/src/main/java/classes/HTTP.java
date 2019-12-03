@@ -6,18 +6,22 @@ import android.util.Log;
 import com.android.volley.ClientError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
+import com.android.volley.Response.ErrorListener;
+import com.android.volley.Response.Listener;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-public class HTTP {
-    private HTTP_Interface interfas;
+import org.jetbrains.annotations.Contract;
+
+import interfaces.HTTPCallback;
+
+public class HTTP{
     private static final String TAG;
 
     static {
-        TAG = "CLASS - HTTP";
+        TAG = "CLASS - HTTPCallback";
     }
 
     private String host;
@@ -29,6 +33,9 @@ public class HTTP {
         this.setMethod("get");
     }
 
+
+
+    @Contract(pure = true)
     private String getHost() {
         return host;
     }
@@ -40,6 +47,7 @@ public class HTTP {
         this.host = host;
     }
 
+    @Contract(pure = true)
     private int getMethod() {
         return method;
     }
@@ -51,39 +59,38 @@ public class HTTP {
         this.method = "get".equals(method) ? Request.Method.GET : Request.Method.POST;
     }
 
+    @Contract(pure = true)
     private String getRuta() {
         return ruta;
     }
 
     private void setRuta(String ruta) {
         ruta = this.getHost() + ruta;
-        ruta = ruta.replace("//", "/");
-        ruta = ruta.toLowerCase();
+        ruta = ruta.replace("//", "/").toLowerCase();
         Log.d(TAG, "setRuta: " + ruta);
 
         this.ruta = ruta;
     }
 
-    public void requerido(final Context contexto){
+    public void requerido(final Context contexto, final HTTPCallback httpCallback){
         RequestQueue queue = Volley.newRequestQueue(contexto);
-        StringRequest stringRequest = new StringRequest(this.getMethod(), this.getRuta(),
-            new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    Log.d(TAG, "onResponse: " + response);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    if(error instanceof TimeoutError)
-                        Log.e(TAG, "onErrorResponse: " + "Fuera de tiempo", error);
-                    if(error instanceof ClientError)
-                        Log.e(TAG, "onErrorResponse: " + "Error de cliente", error);
-                    else
-                        Log.e(TAG, "onErrorResponse: " + "General", error);
-                }
+        StringRequest stringRequest = new StringRequest(this.getMethod(), this.getRuta(), new Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "onResponse: " + response);
+                httpCallback.onSuccess(response);
             }
-        );
+        }, new ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if(error instanceof TimeoutError)
+                    Log.e(TAG, "onErrorResponse: " + "Fuera de tiempo", error);
+                if(error instanceof ClientError)
+                    Log.e(TAG, "onErrorResponse: " + "Error de cliente", error);
+                else
+                    Log.e(TAG, "onErrorResponse: " + "General", error);
+            }
+        });
 
         queue.add(stringRequest);
     }
@@ -99,6 +106,4 @@ public class HTTP {
 
         return this;
     }
-
-
 }
