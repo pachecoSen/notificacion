@@ -14,7 +14,7 @@ import classes.GeoJson;
 import classes.HTTP;
 import interfaces.HTTPCallback;
 
-import static com.example.notificacion.R.layout.dialog_error;
+import static com.example.notificacion.R.layout.err;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG;
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                     final JSONObject json = jsonTool.deffInData(result).toJson();
                     if(false == json.getBoolean("estatus")) {
                         final Dialog dialog = new Dialog(getApplicationContext());
-                        dialog.setContentView(dialog_error);
+                        dialog.setContentView(err);
                         dialog.show();
                     }
 

@@ -1,5 +1,3 @@
 <resources>
-    <string name="app_name">notificacion</string>
-    <string name="window_ticket_s">Window Ticket\'s</string>
-    <string name="esperando">Esperando...</string>
+    <string name="app_name" translatable="false">Notificación</string>
 </resources>
