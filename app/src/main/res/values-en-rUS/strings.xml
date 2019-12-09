@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Notificación</string>
+    <string name="cargando">loading...</string>
+    <string name="nuevo_ticket">New ticket</string>
+</resources>

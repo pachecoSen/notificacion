@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="sEX">30dp</dimen>
+    <dimen name="sMed">15dp</dimen>
+    <dimen name="sRegla">8dp</dimen>
+    <dimen name="sExtra">50dp</dimen>
+    <dimen name="sNormal">20dp</dimen>
+    <dimen name="sMediana">35dp</dimen>
+</resources>

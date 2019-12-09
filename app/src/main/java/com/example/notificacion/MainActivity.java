@@ -1,8 +1,8 @@
 package com.example.notificacion;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +14,8 @@ import classes.GeoJson;
 import classes.HTTP;
 import interfaces.HTTPCallback;
 
-import static com.example.notificacion.R.layout.err;
+import static com.example.notificacion.R.id.txtNewTicket;
+import static com.example.notificacion.R.layout.main;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG;
@@ -34,22 +35,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(main);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         Toast.makeText(getApplicationContext(), "APP Iniciada...", Toast.LENGTH_SHORT).show();
-        this.http.deffMethod("get").deffRuta("/ticket/latest").requerido(getApplicationContext(), new HTTPCallback() {
+        this.http.deffMethod("get");
+        this.http.deffRuta("/ticket/latest");
+        this.http.requerido(getApplicationContext(), new HTTPCallback() {
             @Override
             public void onSuccess(String result) {
                 try {
                     final JSONObject json = jsonTool.deffInData(result).toJson();
-                    if(false == json.getBoolean("estatus")) {
-                        final Dialog dialog = new Dialog(getApplicationContext());
-                        dialog.setContentView(err);
-                        dialog.show();
+                    if (json.getBoolean("estatus")) {
+                        final TextView label = (TextView) findViewById(txtNewTicket);
+                        final int ticket = json.getJSONObject("msg").getInt("latest");
+                        label.setText(ticket);
                     }
 
                 } catch (JSONException e) {
