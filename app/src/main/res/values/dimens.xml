@@ -6,4 +6,5 @@
     <dimen name="sExtra">50dp</dimen>
     <dimen name="sNormal">20dp</dimen>
     <dimen name="sMediana">35dp</dimen>
+    <dimen name="anchoDialog">350dp</dimen>
 </resources>
